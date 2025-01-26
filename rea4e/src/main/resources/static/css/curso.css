@@ -1,0 +1,91 @@
+/* Definição das variáveis de cor no :root */
+:root {
+  --cor-primaria: #00154f;
+  --cor-secundaria: #ff6600;
+  --cor-fundo: #f0f0f0;
+  --cor-texto: #00154f;
+  --cor-branca: #fff;
+}
+
+/* Estilos globais */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: var(--cor-fundo);
+  color: var(--cor-texto);
+}
+
+/* Cabeçalho */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: var(--cor-primaria);
+  color: var(--cor-branca);
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: bold;
+  color: var(--cor-secundaria);
+}
+
+.navbar a {
+  margin: 0 15px;
+  text-decoration: none;
+  font-size: 16px;
+  color: var(--cor-branca);
+}
+
+.navbar a.active {
+  color: var(--cor-secundaria);
+}
+
+.profile img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid var(--cor-secundaria);
+}
+
+/* Conteúdo principal */
+.main-content {
+  padding: 20px;
+}
+
+.course {
+  background-color: var(--cor-branca);
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.course h1 {
+  font-size: 28px;
+  color: var(--cor-primaria);
+  margin-bottom: 10px;
+}
+
+.course p {
+  margin-bottom: 15px;
+}
+
+.watch-button {
+  padding: 10px 20px;
+  background-color: var(--cor-secundaria);
+  color: var(--cor-branca);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.watch-button:hover {
+  background-color: #e55500;
+}

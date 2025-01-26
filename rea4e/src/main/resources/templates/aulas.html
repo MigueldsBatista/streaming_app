@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/css/aulas.css">
+  <link rel="stylesheet" href="/css/footer.css">
+  <link rel="stylesheet" href="/css/navBar.css">
+  <title>Recursos do Curso</title>
+  <script type ="module" src="/js/recursos.js" defer></script>
+</head>
+<body>
+
+  <header>
+    <div class="navbar">
+      <div class="logo" onclick="window.location.href='/view/pagina-inicial'">EDURK+</div>
+      <nav class="menu">
+        <a href="/view/pagina-inicial">Cursos</a>
+        <a href="/view/forum">Fórum</a>
+        <a href="/view/liked">Favoritos</a>
+      </nav>
+      <div class="user-icon" onclick="window.location.href='/view/profile'"></div>
+    </div>
+  </header>
+
+  <div class="course-header">
+    <button onclick="window.location.href='/view/curso'" class="back-button">Voltar</button>
+    <span class="course-title">Recursos do Curso</span>
+  </div>
+
+  <div id="aula-container" class="course-container">
+    <div id="aula-description" class="course-description">
+      <!-- Os recursos do curso serão carregados aqui dinamicamente pelo JavaScript -->
+    </div>
+  </div>
+
+  <div class="footer">
+    <p>© 2024 por Grupo 8.</p>
+    <p>Rua Bione, Cais do Apolo, 77, Recife - PE, 50030-390</p>
+  </div>
+
+</body>
+</html>
