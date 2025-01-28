@@ -1,15 +1,16 @@
 package com.example.rea4e.domain.service.impl;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.example.rea4e.domain.entity.Comentario;
-import com.example.rea4e.domain.entity.RecursoEducacionalAberto;
+import com.example.rea4e.domain.entity.Video;
 import com.example.rea4e.domain.repository.ComentarioRepository;
 import com.example.rea4e.domain.service.BaseService;
 import com.example.rea4e.domain.service.ComentarioService;
 
 import jakarta.transaction.Transactional;
-import java.util.List;
 @Transactional
 @Service
 public class ComentarioServiceImpl extends BaseService<Comentario> implements ComentarioService{
@@ -21,18 +22,18 @@ private final ComentarioRepository comentarioRepository;
 
     // Todos os métodos estão disponíveis via herança.
     // Implementações específicas do domínio podem ser adicionadas aqui
-    public List<Comentario> listarComentariosPorRecurso(RecursoEducacionalAberto recurso){
-        List<Comentario> lista = comentarioRepository.findByReaRelacionado(recurso);
+    public List<Comentario> listarComentariosPorvideo(Video video){
+        List<Comentario> lista = comentarioRepository.findByVideoRelacionado(video);
         return lista;
     }
 
-   public List<Comentario> listarComentariosPorRecurso(Long recursoId){
-        List<Comentario> lista = comentarioRepository.findByReaRelacionado_Id(recursoId);
+   public List<Comentario> listarComentariosPorvideo(Long videoId){
+        List<Comentario> lista = comentarioRepository.findByVideoRelacionado_Id(videoId);
         return lista;
     }
 
-    public Integer contarComentariosPorRecurso(Long recursoId){
-        Integer comentarios = comentarioRepository.findByReaRelacionado_Id(recursoId).size();
+    public Integer contarComentariosPorvideo(Long videoId){
+        Integer comentarios = comentarioRepository.findByVideoRelacionado_Id(videoId).size();
         return comentarios;
     }
 

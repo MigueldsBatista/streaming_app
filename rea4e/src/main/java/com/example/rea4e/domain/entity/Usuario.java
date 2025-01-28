@@ -2,54 +2,51 @@ package com.example.rea4e.domain.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import java.util.List;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import java.util.ArrayList;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Table(name = "USUARIO")
 public class Usuario {
 
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)    
+    @GeneratedValue(strategy = GenerationType.IDENTITY)  
+    @Column(name = "ID", nullable = false)  
     private Long id;
 
-    @Column
+    @Column(name = "EMAIL", nullable = false, unique = true)
     private String email;
 
-    @Column
+    @Column(name = "PASSWORD", nullable = false)
     private String password;
 
-    @Column
+    @Column(name = "NAME", nullable = false)
     private String name;
 
 
     @JsonIgnore//diz para o parser que isso deve ser ignorado no nosso json
     @ManyToMany
     @JoinTable(
-        name = "usuario_favoritos",
-        joinColumns = @JoinColumn(name = "usuario_id"),
-        inverseJoinColumns = @JoinColumn(name = "rea_id")
+        name = "USUARIOS_FAVORITOS",
+        joinColumns = @JoinColumn(name = "USUARIO_ID"),
+        inverseJoinColumns = @JoinColumn(name = "VIDEO_ID")
     )
-    private List<RecursoEducacionalAberto> reasFavoritos = new ArrayList<>(); // Inicializando
+    private List<Video> videosFavoritos = new ArrayList<>(); // Inicializando
     
     
     public Usuario (String email, String password, String name){

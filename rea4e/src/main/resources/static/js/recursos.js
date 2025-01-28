@@ -1,226 +1,226 @@
-const API_RECURSOS = '/api/recurso-educacional-aberto';
+const API_videoS = '/api/video-educacional-aberto';
 const urlParams = new URLSearchParams(window.location.search);
 const cursoId = urlParams.get('id');
 window.onload = async () => {
-carregarRecursosDoCurso(cursoId);
+carregarvideosDoCurso(cursoId);
 }
-// Lista todos os recursos
-async function carregarRecursos() {
-    const response = await fetch(API_RECURSOS);
-    const recursos = await response.json();
-    return recursos;
+// Lista todos os videos
+async function carregarvideos() {
+    const response = await fetch(API_videoS);
+    const videos = await response.json();
+    return videos;
 }
 
-function carregarRecursosDoCurso(cursoId) {
+function carregarvideosDoCurso(cursoId) {
     const courseContainer = document.querySelector("#aula-container");
     const courseDescription = courseContainer.querySelector("#aula-description");
     courseDescription.innerHTML = ""; // Limpa a descrição do curso antes de preencher
-    obterRecursosPorCurso(cursoId).then(recursos => {
-        recursos.forEach(recurso => {
+    obtervideosPorCurso(cursoId).then(videos => {
+        videos.forEach(video => {
             const div = document.createElement("div");
             
-            div.className = "recurso";
-            div.textContent = recurso.titulo;
+            div.className = "video";
+            div.textContent = video.titulo;
             courseDescription.appendChild(div);
         });
     }).catch(error => {
-        console.error('Erro ao carregar os recursos do curso:', error);
+        console.error('Erro ao carregar os videos do curso:', error);
     });
 }
 
-// Função para carregar os recursos em um select
-export function carregarObjetoRecurso() {
-    const selectRecursos = document.querySelector("#recursos");
-    selectRecursos.innerHTML = ""; // Limpa a lista de recursos antes de preencher
-    carregarRecursos().then(recursos => {
-        recursos.forEach(recurso => {
+// Função para carregar os videos em um select
+export function carregarObjetovideo() {
+    const selectvideos = document.querySelector("#videos");
+    selectvideos.innerHTML = ""; // Limpa a lista de videos antes de preencher
+    carregarvideos().then(videos => {
+        videos.forEach(video => {
             const option = document.createElement("option");
-            option.value = recurso.id;
-            option.textContent = recurso.titulo;
-            selectRecursos.appendChild(option);
+            option.value = video.id;
+            option.textContent = video.titulo;
+            selectvideos.appendChild(option);
         });
     }).catch(error => {
-        console.error('Erro ao carregar os recursos:', error);
+        console.error('Erro ao carregar os videos:', error);
     });
 }
 
-// Nova função para carregar recursos por autor
-async function carregarRecursosPorAutor(autorId) {
-    const response = await fetch(`${API_RECURSOS}/autor/${autorId}`);
-    const recursos = await response.json();
-    return recursos;
+// Nova função para carregar videos por autor
+async function carregarvideosPorAutor(autorId) {
+    const response = await fetch(`${API_videoS}/autor/${autorId}`);
+    const videos = await response.json();
+    return videos;
 }
 
-// Função para carregar os recursos por autor em um select
-function carregarRecursosPorAutorSelect(autorId) {
-    const selectRecursos = document.querySelector("#recursos");
-    selectRecursos.innerHTML = ""; // Limpa a lista de recursos antes de preencher
-    carregarRecursosPorAutor(autorId).then(recursos => {
-        recursos.forEach(recurso => {
+// Função para carregar os videos por autor em um select
+function carregarvideosPorAutorSelect(autorId) {
+    const selectvideos = document.querySelector("#videos");
+    selectvideos.innerHTML = ""; // Limpa a lista de videos antes de preencher
+    carregarvideosPorAutor(autorId).then(videos => {
+        videos.forEach(video => {
             const option = document.createElement("option");
-            option.value = recurso.id;
-            option.textContent = recurso.titulo;
-            selectRecursos.appendChild(option);
+            option.value = video.id;
+            option.textContent = video.titulo;
+            selectvideos.appendChild(option);
         });
     }).catch(error => {
-        console.error('Erro ao carregar os recursos por autor:', error);
+        console.error('Erro ao carregar os videos por autor:', error);
     });
 }
 
-// Nova função para carregar recursos por categoria
-async function carregarRecursosPorCategoria(categoria) {
-    const response = await fetch(`${API_RECURSOS}/categoria/${categoria}`);
-    const recursos = await response.json();
-    return recursos;
+// Nova função para carregar videos por categoria
+async function carregarvideosPorCategoria(categoria) {
+    const response = await fetch(`${API_videoS}/categoria/${categoria}`);
+    const videos = await response.json();
+    return videos;
 }
 
-// Função para carregar os recursos por categoria em um select
-function carregarRecursosPorCategoriaSelect(categoria) {
-    const selectRecursos = document.querySelector("#recursos");
-    selectRecursos.innerHTML = ""; // Limpa a lista de recursos antes de preencher
-    carregarRecursosPorCategoria(categoria).then(recursos => {
-        recursos.forEach(recurso => {
+// Função para carregar os videos por categoria em um select
+function carregarvideosPorCategoriaSelect(categoria) {
+    const selectvideos = document.querySelector("#videos");
+    selectvideos.innerHTML = ""; // Limpa a lista de videos antes de preencher
+    carregarvideosPorCategoria(categoria).then(videos => {
+        videos.forEach(video => {
             const option = document.createElement("option");
-            option.value = recurso.id;
-            option.textContent = recurso.titulo;
-            selectRecursos.appendChild(option);
+            option.value = video.id;
+            option.textContent = video.titulo;
+            selectvideos.appendChild(option);
         });
     }).catch(error => {
-        console.error('Erro ao carregar os recursos por categoria:', error);
+        console.error('Erro ao carregar os videos por categoria:', error);
     });
 }
 
-// Nova função para buscar um recurso por ID
-async function carregarRecursoPorId(id) {
-    const response = await fetch(`${API_RECURSOS}/${id}`);
-    const recurso = await response.json();
-    return recurso;
+// Nova função para buscar um video por ID
+async function carregarvideoPorId(id) {
+    const response = await fetch(`${API_videoS}/${id}`);
+    const video = await response.json();
+    return video;
 }
 
-// Função para exibir os detalhes de um recurso (por exemplo, em uma página de detalhes)
-function exibirDetalhesRecurso(id) {
-    carregarRecursoPorId(id).then(recurso => {
-        const detalhes = document.querySelector("#detalhesRecurso");
+// Função para exibir os detalhes de um video (por exemplo, em uma página de detalhes)
+function exibirDetalhesvideo(id) {
+    carregarvideoPorId(id).then(video => {
+        const detalhes = document.querySelector("#detalhesvideo");
         detalhes.innerHTML = `
-            <h2>${recurso.titulo}</h2>
-            <p>${recurso.descricao}</p>
-            <p>Categoria: ${recurso.categoria}</p>
-            <p>Autor: ${recurso.autor}</p>
+            <h2>${video.titulo}</h2>
+            <p>${video.descricao}</p>
+            <p>Categoria: ${video.categoria}</p>
+            <p>Autor: ${video.autor}</p>
         `;
     }).catch(error => {
-        console.error('Erro ao carregar o recurso por ID:', error);
+        console.error('Erro ao carregar o video por ID:', error);
     });
 }
 
-// Função para salvar um novo recurso
-async function salvarRecurso(recurso) {
-    const response = await fetch(API_RECURSOS, {
+// Função para salvar um novo video
+async function salvarvideo(video) {
+    const response = await fetch(API_videoS, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify(recurso)
+        body: JSON.stringify(video)
     });
-    const novoRecurso = await response.json();
-    return novoRecurso;
+    const novovideo = await response.json();
+    return novovideo;
 }
 
-// Função para salvar um novo recurso (exemplo de uso em um formulário)
-function salvarRecursoFormulario() {
-    const recurso = {
+// Função para salvar um novo video (exemplo de uso em um formulário)
+function salvarvideoFormulario() {
+    const video = {
         titulo: document.querySelector("#titulo").value,
         descricao: document.querySelector("#descricao").value,
         categoria: document.querySelector("#categoria").value,
         autorId: document.querySelector("#autorId").value
     };
 
-    salvarRecurso(recurso).then(novoRecurso => {
-        console.log('Novo recurso salvo:', novoRecurso);
+    salvarvideo(video).then(novovideo => {
+        console.log('Novo video salvo:', novovideo);
     }).catch(error => {
-        console.error('Erro ao salvar o recurso:', error);
+        console.error('Erro ao salvar o video:', error);
     });
 }
 
-// Nova função para atualizar um recurso
-async function atualizarRecurso(id, recurso) {
-    const response = await fetch(`${API_RECURSOS}/${id}`, {
+// Nova função para atualizar um video
+async function atualizarvideo(id, video) {
+    const response = await fetch(`${API_videoS}/${id}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify(recurso)
+        body: JSON.stringify(video)
     });
-    const recursoAtualizado = await response.json();
-    return recursoAtualizado;
+    const videoAtualizado = await response.json();
+    return videoAtualizado;
 }
 
-// Função para atualizar um recurso (exemplo de uso em um formulário)
-function atualizarRecursoFormulario(id) {
-    const recurso = {
+// Função para atualizar um video (exemplo de uso em um formulário)
+function atualizarvideoFormulario(id) {
+    const video = {
         titulo: document.querySelector("#titulo").value,
         descricao: document.querySelector("#descricao").value,
         categoria: document.querySelector("#categoria").value,
         autorId: document.querySelector("#autorId").value
     };
 
-    atualizarRecurso(id, recurso).then(recursoAtualizado => {
-        console.log('Recurso atualizado:', recursoAtualizado);
+    atualizarvideo(id, video).then(videoAtualizado => {
+        console.log('video atualizado:', videoAtualizado);
     }).catch(error => {
-        console.error('Erro ao atualizar o recurso:', error);
+        console.error('Erro ao atualizar o video:', error);
     });
 }
 
-// Função para deletar um recurso
-async function deletarRecurso(id) {
-    const response = await fetch(`${API_RECURSOS}/${id}`, {
+// Função para deletar um video
+async function deletarvideo(id) {
+    const response = await fetch(`${API_videoS}/${id}`, {
         method: 'DELETE'
     });
     return response.ok;
 }
 
-// Função para deletar um recurso (exemplo de uso)
-function deletarRecursoFormulario(id) {
-    deletarRecurso(id).then(success => {
+// Função para deletar um video (exemplo de uso)
+function deletarvideoFormulario(id) {
+    deletarvideo(id).then(success => {
         if (success) {
-            console.log('Recurso deletado com sucesso');
+            console.log('video deletado com sucesso');
         } else {
-            console.error('Erro ao deletar o recurso');
+            console.error('Erro ao deletar o video');
         }
     }).catch(error => {
-        console.error('Erro ao deletar o recurso:', error);
+        console.error('Erro ao deletar o video:', error);
     });
 }
 
 //TODO
-async function obterRecursosPorCurso(cursoId) {
-    const response = await fetch(`${API_RECURSOS}/${cursoId}/recursos`);
-    const recursos = await response.json();
-    return recursos;
+async function obtervideosPorCurso(cursoId) {
+    const response = await fetch(`${API_videoS}/${cursoId}/videos`);
+    const videos = await response.json();
+    return videos;
 }
 
-// Função para carregar os recursos por curso em um select
-function carregarRecursosPorCurso(cursoId) {
-    const selectRecursos = document.querySelector("#aula-container");
-    selectRecursos.innerHTML = ""; // Limpa a lista de recursos antes de preencher
-    obterRecursosPorCurso(cursoId).then(recursos => {
-        recursos.forEach(recurso => {
+// Função para carregar os videos por curso em um select
+function carregarvideosPorCurso(cursoId) {
+    const selectvideos = document.querySelector("#aula-container");
+    selectvideos.innerHTML = ""; // Limpa a lista de videos antes de preencher
+    obtervideosPorCurso(cursoId).then(videos => {
+        videos.forEach(video => {
             const div = document.createElement("div");
             div.innerHTML = `
-                <h3>Titulo: ${recurso.titulo}</h3>
-                <p>Descricao: ${recurso.descricao}</p>
-                <p>Categoria: ${recurso.categoria}</p>
-                <p>Autor: ${recurso.autor}</p>
+                <h3>Titulo: ${video.titulo}</h3>
+                <p>Descricao: ${video.descricao}</p>
+                <p>Categoria: ${video.categoria}</p>
+                <p>Autor: ${video.autor}</p>
             `;
-            selectRecursos.appendChild(div);
+            selectvideos.appendChild(div);
         });
     }).catch(error => {
-        console.error('Erro ao carregar os recursos por curso:', error);
+        console.error('Erro ao carregar os videos por curso:', error);
     });
 }
 
 // Nova função para listar todas as categorias
 async function listarCategorias() {
-    const response = await fetch(`${API_RECURSOS}/listar-categorias`);
+    const response = await fetch(`${API_videoS}/listar-categorias`);
     const categorias = await response.json();
     return categorias;
 }

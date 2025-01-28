@@ -12,7 +12,7 @@
   
   
   
-  Carregar recursos JS como módulos -->
+  Carregar videos JS como módulos -->
   <title>EDURK+ - Cursos</title>
 </head>
 <body>
@@ -64,10 +64,10 @@
       <label for="url">Link do Curso:</label>
       <input type="text" id="url" name="url" required><br>
       
-      <label for="recursos">Selecione os Recursos:</label>
-      <select id="recursos" name="recursos" multiple required>
+      <label for="videos">Selecione os videos:</label>
+      <select id="videos" name="videos" multiple required>
         <option value="">Nenhum</option>
-        <!-- Os recursos serão carregados aqui -->
+        <!-- Os videos serão carregados aqui -->
       </select><br>
       
       <button type="submit">Salvar Curso</button>
@@ -93,7 +93,7 @@
   
   <div class="footer">© 2024 por Grupo 8. Rua Bione, Cais do Apolo, 77, Recife - PE, 50030-390 </div>
   
-  <script type="module" th:src="@{/js/recursos.js}"></script> <!-- Arquivo de recursos -->
+  <script type="module" th:src="@{/js/videos.js}"></script> <!-- Arquivo de videos -->
   <script type="module" th:src="@{/js/cursos.js}"></script> <!-- Arquivo principal -->
   <!-- Finalizando a tag </body> -->
 </body>

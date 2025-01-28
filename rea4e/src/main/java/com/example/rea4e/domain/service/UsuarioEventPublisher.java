@@ -12,33 +12,14 @@ public class UsuarioEventPublisher {
         this.publisher = publisher;
     }
 
-    public void publishRecursoFavoritado(Long usuarioId, Long recursoId) {
-        RecursoFavoritadoEvent event = new RecursoFavoritadoEvent(this, usuarioId, recursoId);
+    public void publishvideoFavoritado(Long usuarioId, Long videoId) {
+        VideoFavoritadoEvent event = new VideoFavoritadoEvent(this, usuarioId, videoId);
         publisher.publishEvent(event);
     }
 
-    public void publishRecursoDesfavoritado(Long usuarioId, Long recursoId) {
-    RecursoDesfavoritadoEvent event = new RecursoDesfavoritadoEvent(this, usuarioId, recursoId);
+    public void publishvideoDesfavoritado(Long usuarioId, Long videoId) {
+    VideoDesfavoritadoEvent event = new VideoDesfavoritadoEvent(this, usuarioId, videoId);
     publisher.publishEvent(event);
-    }
-
-    public void publishMarcarRecursoConcluido(Long recursoId, Long usuarioId){
-        RecursoMarcadoComoConcluidoEvent event = new RecursoMarcadoComoConcluidoEvent(this, usuarioId, recursoId);
-        publisher.publishEvent(event);
-    }
-    public void publishDesmarcarRecursoConcluido(Long recursoId, Long usuarioId){
-        RecursoDesmarcadoComoConcluidoEvent event = new RecursoDesmarcadoComoConcluidoEvent(this, usuarioId, recursoId);
-        publisher.publishEvent(event);
-    }
-
-    public void publishInscricaoEmCurso(Long cursoId, Long usuarioId){
-        InscricaoEmCursoEvent event = new InscricaoEmCursoEvent(this, cursoId, usuarioId);
-        publisher.publishEvent(event);
-    }
-
-    public void publishDesinscricaoEmCurso(Long cursoId, Long usuarioId) {
-        DesinscricaoEmCursoEvent event = new DesinscricaoEmCursoEvent(this, cursoId, usuarioId);
-        publisher.publishEvent(event);
     }
 
 }

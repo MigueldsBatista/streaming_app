@@ -51,15 +51,15 @@ public ComentarioController(ComentarioService servico) {
         return ResponseEntity.ok(comentarioAtualizado);
     }
 
-    @GetMapping("/recurso/{recursoId}")
-    public ResponseEntity<List<Comentario>> listarComentariosPorRecurso(@PathVariable Long recursoId) {
-        List<Comentario> comentario = servico.listarComentariosPorRecurso(recursoId);
+    @GetMapping("/video/{videoId}")
+    public ResponseEntity<List<Comentario>> listarComentariosPorvideo(@PathVariable Long videoId) {
+        List<Comentario> comentario = servico.listarComentariosPorvideo(videoId);
         return ResponseEntity.ok(comentario);
     }
 
-    @GetMapping("/recurso/{recursoId}/contar")
-    public ResponseEntity<Integer> contarComentariosPorRecurso(@PathVariable Long recursoId) {
-        Integer comentario = servico.contarComentariosPorRecurso(recursoId);
+    @GetMapping("/video/{videoId}/contar")
+    public ResponseEntity<Integer> contarComentariosPorvideo(@PathVariable Long videoId) {
+        Integer comentario = servico.contarComentariosPorvideo(videoId);
         return ResponseEntity.ok(comentario);
     }
 

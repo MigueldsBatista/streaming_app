@@ -26,40 +26,19 @@ public class GlobalExceptionHandler {
     }
 
 
-    @ExceptionHandler(CourseNotFoundInSubscribedListException.class)
-    public ResponseEntity<String> handleCourseNotFoundInSubscribedListException(CourseNotFoundInSubscribedListException ex) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
-    }
-
-    @ExceptionHandler(ResourceAlreadyFinishedException.class)           //ReourceAlreadyFinishedException
-    public ResponseEntity<String> handleResourceAlreadyFinishedException(ResourceAlreadyFinishedException ex) {
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
-    }
-
-    @ExceptionHandler(ResourceAlreadyAddedException.class)
-    public ResponseEntity<String> handleResourceAlreadyAddedException(ResourceAlreadyAddedException ex) {
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
-    }
 
     @ExceptionHandler(ResourceAlreadyFavoritedException.class)
     public ResponseEntity<String> handleResourceAlreadyFavoritedException(ResourceAlreadyFavoritedException ex) {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
     }
 
-    @ExceptionHandler(ResourceNotPresentInConcludedException.class)
-    public ResponseEntity<String> handleResourceNotPresentInConcludedException(ResourceNotPresentInConcludedException ex) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
-    }
+
 
     @ExceptionHandler(ResourceNotPresentInFavouritesException.class)
     public ResponseEntity<String> handleResourceNotPresentInFavouritesException(ResourceNotPresentInFavouritesException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
 
-    @ExceptionHandler(UserAlreadySubscribedException.class)
-    public ResponseEntity<String> handleUserAlreadySubscribedException(UserAlreadySubscribedException ex) {
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
-    }
 
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<String> handleUserNotFoundException(UserNotFoundException ex) {

@@ -8,14 +8,10 @@ public interface UsuarioService {
 Usuario salvar(Usuario usuario);
 void deletar(Long id);
 Usuario buscarPorId(Long id);
-void favoritarRecurso(Long usuarioId, Long Recurso);
+void favoritarVideo(Long usuarioId, Long video);
  
-void desfavoritarRecurso(Long usuarioId, Long RecursoId);
+void desfavoritarVideo(Long usuarioId, Long videoId);
 
-void marcarRecursoComoConcluido(Long usuarioId, Long reaId);
-void desmarcarRecursoComoConcluido(Long usuarioId, Long reaId);
-void inscreverEmCurso(Long usuarioId, Long cursoId);
-void desinscreverEmCurso(Long usuarioId, Long cursoId);
 
 
 //void adicionarPermissaoUsuario(Long usuarioId, String permissao);

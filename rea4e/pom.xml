@@ -92,6 +92,7 @@
 			<artifactId>mapstruct-processor</artifactId>
 			<version>1.5.2.Final</version>
 			<scope>provided</scope>
+
 		</dependency>
 
 	</dependencies>

@@ -4,48 +4,52 @@ package com.example.rea4e.domain.listener;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
-import com.example.rea4e.domain.entity.*;
-import com.example.rea4e.domain.event.*;
-import com.example.rea4e.domain.exception.*;
-import com.example.rea4e.domain.service.*;
+import com.example.rea4e.domain.entity.Usuario;
+import com.example.rea4e.domain.entity.Video;
+import com.example.rea4e.domain.event.VideoDesfavoritadoEvent;
+import com.example.rea4e.domain.event.VideoFavoritadoEvent;
+import com.example.rea4e.domain.exception.ResourceAlreadyFavoritedException;
+import com.example.rea4e.domain.exception.ResourceNotPresentInFavouritesException;
 import com.example.rea4e.domain.repository.UsuarioRepository;
+import com.example.rea4e.domain.service.UsuarioService;
+import com.example.rea4e.domain.service.VideoService;
 
 @Component
 public class UsuarioEventListener {
     private final UsuarioService usuarioService;
     private final UsuarioRepository usuarioRepository;
-    private final RecursoEducacionalAbertoService reaService;
+    private final VideoService reaService;
 
-    public UsuarioEventListener(UsuarioService usuarioService, UsuarioRepository usuarioRepository, RecursoEducacionalAbertoService reaService) {
+    public UsuarioEventListener(UsuarioService usuarioService, UsuarioRepository usuarioRepository, VideoService reaService) {
         this.usuarioService = usuarioService;
         this.usuarioRepository = usuarioRepository;
         this.reaService = reaService;
     }
 
     @EventListener
-    public void handleRecursoFavoritadoEvent(RecursoFavoritadoEvent event) {
+    public void handlevideoFavoritadoEvent(VideoFavoritadoEvent event) {
         Long usuarioId=event.getUsuarioId();
-        Long recursoId=event.getRecursoId();
-        RecursoEducacionalAberto recurso = reaService.buscarPorId(recursoId);//aqui vai verificar se o recurso existe
+        Long videoId=event.getVideoId();
+        Video video = reaService.buscarPorId(videoId);//aqui vai verificar se o video existe
         Usuario usuario = usuarioService.buscarPorId(usuarioId);//a função verifica se a entidade existe
-        if (usuario.getReasFavoritos().contains(recurso)) {
-            throw new ResourceAlreadyFavoritedException("Recurso já favoritado.");
+        if (usuario.getVideosFavoritos().contains(video)) {
+            throw new ResourceAlreadyFavoritedException("Video já favoritado.");
         }
-            usuario.getReasFavoritos().add(recurso);
+            usuario.getVideosFavoritos().add(video);
             usuarioService.salvar(usuario);
         
     }
 
     @EventListener
-    public void handleRecursoDesfavoritadoEvent(RecursoDesfavoritadoEvent event) {
+    public void handleVideoDesfavoritadoEvent(VideoDesfavoritadoEvent event) {
         Long usuarioId=event.getUsuarioId();
-        Long recursoId=event.getRecursoId();
-        RecursoEducacionalAberto recurso = reaService.buscarPorId(recursoId);//aqui vai verificar se o recurso existe
+        Long videoId=event.getvideoId();
+        Video video = reaService.buscarPorId(videoId);//aqui vai verificar se o video existe
         Usuario usuario = usuarioService.buscarPorId(usuarioId);//a função verifica se a entidade existe
-        if (!usuario.getReasFavoritos().contains(recurso)) {
-            throw new ResourceNotPresentInFavouritesException("Recurso não está presente na lista de favoritos.");
+        if (!usuario.getVideosFavoritos().contains(video)) {
+            throw new ResourceNotPresentInFavouritesException("Video não está presente na lista de favoritos.");
         }
-            usuario.getReasFavoritos().add(recurso);
+            usuario.getVideosFavoritos().remove(video);
             usuarioRepository.save(usuario);
     }
 

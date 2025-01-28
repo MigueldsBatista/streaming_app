@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recursos Educacionais Abertos</title>
+    <title>videos Educacionais Abertos</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -24,12 +24,12 @@
     </style>
 </head>
 <body>
-    <h1>Recursos Educacionais Abertos</h1>
+    <h1>videos Educacionais Abertos</h1>
 
     <!-- Listagem -->
     <div>
-        <h2>Lista de Recursos</h2>
-        <table id="recursosTable">
+        <h2>Lista de videos</h2>
+        <table id="videosTable">
             <thead>
                 <tr>
                     <th>Título</th>
@@ -40,7 +40,7 @@
                 </tr>
             </thead>
             <tbody>
-                <!-- Recursos serão adicionados aqui dinamicamente -->
+                <!-- videos serão adicionados aqui dinamicamente -->
             </tbody>
         </table>
     </div>
@@ -48,8 +48,8 @@
     <!-- Formulário de Criação/Atualização -->
     <div>
         <h2>Adicionar</h2>
-        <form id="recursoForm">
-            <input type="hidden" id="recursoId">
+        <form id="videoForm">
+            <input type="hidden" id="videoId">
             <label>
                 Título: 
                 <input type="text" id="titulo" required>
@@ -82,7 +82,7 @@
     </div>
 
     <script>
-        const API_BASE = '/api/recurso-educacional-aberto';
+        const API_BASE = '/api/video-educacional-aberto';
 
         // Carregar categorias
         async function carrecarCategorias() {
@@ -98,35 +98,35 @@
         }
 
         window.onload = function() {
-            carregarRecursos();
+            carregarvideos();
             carrecarCategorias();
         };
 
-        // Carregar lista de recursos
-        async function carregarRecursos() {
+        // Carregar lista de videos
+        async function carregarvideos() {
             const response = await fetch(API_BASE);
-            const recursos = await response.json();
-            const tbody = document.querySelector("#recursosTable tbody");
+            const videos = await response.json();
+            const tbody = document.querySelector("#videosTable tbody");
             tbody.innerHTML = ""; // Limpa a tabela antes de preencher
-            recursos.forEach(recurso => {
+            videos.forEach(video => {
                 const row = document.createElement("tr");
                 row.innerHTML = `
-                    <td>${recurso.titulo}</td>
-                    <td>${recurso.descricao}</td>
-                    <td>${recurso.autor}</td>
-                    <td>${recurso.categoria}</td>
+                    <td>${video.titulo}</td>
+                    <td>${video.descricao}</td>
+                    <td>${video.autor}</td>
+                    <td>${video.categoria}</td>
                     <td>
-                        <button onclick="deletarRecurso(${recurso.id})">Deletar</button>
+                        <button onclick="deletarvideo(${video.id})">Deletar</button>
                     </td>
                 `;
                 tbody.appendChild(row);
             });
         }
 
-        // Salvar (criar ou atualizar) recurso
-        document.querySelector("#recursoForm").addEventListener("submit", async (e) => {
+        // Salvar (criar ou atualizar) video
+        document.querySelector("#videoForm").addEventListener("submit", async (e) => {
             e.preventDefault();
-            const id = document.querySelector("#recursoId").value;
+            const id = document.querySelector("#videoId").value;
             const titulo = document.querySelector("#titulo").value;
             const descricao = document.querySelector("#descricao").value;
             const autor = document.querySelector("#autor").value;
@@ -136,7 +136,7 @@
             const metodo = id ? "PUT" : "POST";  // Verifica se é PUT (editar) ou POST (criar)
             const fetch_url = id ? `${API_BASE}/${id}` : API_BASE;
 
-            const recurso = {
+            const video = {
                 titulo,
                 descricao,
                 autor,
@@ -150,32 +150,32 @@
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify(recurso)
+                body: JSON.stringify(video)
             });
 
-            document.querySelector("#recursoForm").reset(); // Limpa o formulário
-            document.querySelector("#recursoId").value = ""; // Limpa o ID
-            carregarRecursos(); // Atualiza a lista
+            document.querySelector("#videoForm").reset(); // Limpa o formulário
+            document.querySelector("#videoId").value = ""; // Limpa o ID
+            carregarvideos(); // Atualiza a lista
         });
 
-        // Deletar recurso
-        async function deletarRecurso(id) {
-            if (confirm("Tem certeza que deseja deletar este recurso?")) {
+        // Deletar video
+        async function deletarvideo(id) {
+            if (confirm("Tem certeza que deseja deletar este video?")) {
                 await fetch(`${API_BASE}/${id}`, { method: "DELETE" });
-                carregarRecursos();
+                carregarvideos();
             }
         }
 
-        // Editar recurso (preenche o formulário com os dados do recurso)
-        async function editarRecurso(id) {
+        // Editar video (preenche o formulário com os dados do video)
+        async function editarvideo(id) {
             const response = await fetch(`${API_BASE}/${id}`);
-            const recurso = await response.json();
-            document.querySelector("#recursoId").value = recurso.id;
-            document.querySelector("#titulo").value = recurso.titulo;
-            document.querySelector("#descricao").value = recurso.descricao;
-            document.querySelector("#autor").value = recurso.autor;
-            document.querySelector("#categoria").value = recurso.categoria;
-            document.querySelector("#url").value = recurso.url;  // Preenche a URL no formulário
+            const video = await response.json();
+            document.querySelector("#videoId").value = video.id;
+            document.querySelector("#titulo").value = video.titulo;
+            document.querySelector("#descricao").value = video.descricao;
+            document.querySelector("#autor").value = video.autor;
+            document.querySelector("#categoria").value = video.categoria;
+            document.querySelector("#url").value = video.url;  // Preenche a URL no formulário
         }
     </script>
 </body>

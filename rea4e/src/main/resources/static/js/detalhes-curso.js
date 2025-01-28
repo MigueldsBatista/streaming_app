@@ -1,6 +1,6 @@
 const API_BASE = '/api/cursos';
 const API_USUARIO = '/api/usuario';
-const API_RECURSOS = '/api/recurso-educacional-aberto';
+const API_videoS = '/api/video-educacional-aberto';
 
 const urlParams = new URLSearchParams(window.location.search);
 const cursoId = urlParams.get('id');

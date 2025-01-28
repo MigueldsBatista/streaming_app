@@ -1,11 +1,11 @@
-import { carregarObjetoRecurso } from "./recursos.js";
+import { carregarObjetovideo } from "./videos.js";
 // URLs das APIs
 const API_BASE = '/api/cursos';
-const API_RECURSOS = '/api/recurso-educacional-aberto';
+const API_videoS = '/api/video-educacional-aberto';
 
 // Função principal de inicialização
 window.onload = async () => {
-  //await carregarObjetoRecurso();          // Carrega os recursos
+  //await carregarObjetovideo();          // Carrega os videos
   await carregarCategorias();            // Preenche categorias no formulário
   await carregarCategoriasFiltradas();   // Preenche categorias no filtro
   carregarCursos();
@@ -93,9 +93,9 @@ async function editarCurso(id) {
     document.querySelector("#categoria").value = curso.categoria;
     document.querySelector("#url").value = curso.url;
 
-    const selectRecursos = document.querySelector("#recursos");
-    Array.from(selectRecursos.options).forEach(option => {
-      option.selected = curso.recursos.includes(option.value);
+    const selectvideos = document.querySelector("#videos");
+    Array.from(selectvideos.options).forEach(option => {
+      option.selected = curso.videos.includes(option.value);
     });
 
     document.querySelector("#addCursoForm").style.display = "block"; // Exibe o formulário
@@ -115,14 +115,14 @@ async function salvarCurso(e) {
   const descricao = document.querySelector("#descricao").value;
   const categoria = document.querySelector("#categoria").value;
   const url = document.querySelector("#url").value;
-  const recursosSelecionados = Array.from(
-    document.querySelector("#recursos").selectedOptions
+  const videosSelecionados = Array.from(
+    document.querySelector("#videos").selectedOptions
   ).map(option => option.value);
 
   const metodo = id ? "PUT" : "POST";
   const fetchUrl = id ? `${API_BASE}/${id}` : API_BASE;
 
-  const curso = { titulo, descricao, categoria, url, recursos: recursosSelecionados };
+  const curso = { titulo, descricao, categoria, url, videos: videosSelecionados };
 
   try {
     await fetch(fetchUrl, {
@@ -148,7 +148,7 @@ async function salvarCurso(e) {
  */
 async function obterCategorias() {
   try {
-    const response = await fetch(`${API_RECURSOS}/listar-categorias`);
+    const response = await fetch(`${API_videoS}/listar-categorias`);
     return await response.json();
   } catch (error) {
     console.error("Erro ao obter categorias:", error);

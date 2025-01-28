@@ -19,30 +19,15 @@ public class UsuarioServiceImpl extends BaseService<Usuario> implements UsuarioS
     public UsuarioServiceImpl(UsuarioEventPublisher eventPublisher) {
         this.eventPublisher = eventPublisher;
     }
-    public void favoritarRecurso(Long usuarioId, Long recursoId){
-        eventPublisher.publishRecursoFavoritado(usuarioId, recursoId);
+    public void favoritarVideo(Long usuarioId, Long videoId){
+        eventPublisher.publishvideoFavoritado(usuarioId, videoId);
     }
     
-    public void desfavoritarRecurso(Long usuarioId, Long recursoId){
-        eventPublisher.publishRecursoDesfavoritado(usuarioId, recursoId);
+    public void desfavoritarVideo(Long usuarioId, Long videoId){
+        eventPublisher.publishvideoDesfavoritado(usuarioId, videoId);
     }
 
-    public void inscreverEmCurso(Long usuarioId, Long cursoId){
-        eventPublisher.publishInscricaoEmCurso(cursoId, usuarioId);
-    }
-
-    public void desinscreverEmCurso(Long usuarioId, Long cursoId){
-        eventPublisher.publishDesinscricaoEmCurso(cursoId, usuarioId);
-    }
-
-    public void marcarRecursoComoConcluido(Long usuarioId, Long recursoId){
-        eventPublisher.publishMarcarRecursoConcluido(recursoId, usuarioId);
-    }
-
-    public void desmarcarRecursoComoConcluido(Long usuarioId, Long recursoId){
-        eventPublisher.publishDesmarcarRecursoConcluido(recursoId, usuarioId);
-}
-
+   
 
 
 }

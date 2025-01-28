@@ -1,10 +1,6 @@
 package com.example.rea4e.domain.entity;
 
 import lombok.Data;
-
-import java.util.Set;
-import java.util.HashSet;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -12,7 +8,9 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
@@ -20,31 +18,33 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class RecursoEducacionalAberto {
+@Table(name = "VIDEO")
+public class Video {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ID", nullable = false)
     private Long id;
 
-    @Column(nullable = false) 
+    @Column(nullable = false, name = "TITULO") 
     private String titulo;
 
-    private String autor;
+    @ManyToOne//muitos videos para um usuario
+    @JoinColumn(name = "USUARIO_ID", nullable = false) 
+    private Usuario autor;
 
-    @Column // Considerar adicionar `nullable` ou `length` se necessário
-    private String licenca;  // Ex: Creative Commons
+    @Column(nullable = false, name = "URL") 
+    private String url;      // URL do video
 
-    @Column(nullable = false) 
-    private String url;      // URL do recurso
-
-    @Column(length = 500) // Sugestão: limite de caracteres para descrição
+    @Column(length = 500, name = "DESCRICAO") // Sugestão: limite de caracteres para descrição
     private String descricao;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false, name = "CATEGORIA")
     private Categorias categoria;    
 
 
-    public RecursoEducacionalAberto(String titulo, String autor, String url, String descricao, Categorias categoria) {
+    public Video(String titulo, Usuario autor, String url, String descricao, Categorias categoria) {
         this.titulo = titulo;
         this.autor = autor;
         this.url = url;
@@ -52,9 +52,4 @@ public class RecursoEducacionalAberto {
         this.categoria = categoria;
     }
 
-    public RecursoEducacionalAberto(String titulo, String descricao, String url){
-        this.titulo = titulo;
-        this.descricao = descricao;
-        this.url = url;
-    }
 }

@@ -16,6 +16,7 @@ public abstract class BaseService<T> {
         return repositorio.findAll();
     }
 
+
     public T buscarPorId(Long id) {
         Assert.notNull(id, "ID não pode ser nulo");
         return repositorio.findById(id)
@@ -23,18 +24,20 @@ public abstract class BaseService<T> {
     }
 
     public T salvar(T entity) {
-        Assert.notNull(entity, "Entidade não pode ser nula");
+        Assert.notNull(entity, "Entidade não pode ser nula");//assert vai verificar se a entidade não é nula e se for ele vai lançar uma exceção
         return repositorio.save(entity);
     }
 
     public void deletar(Long id) {
         Assert.notNull(id, "ID não pode ser nulo");
         T entity = buscarPorId(id);
-        repositorio.delete(entity);
+        this.deletar(entity);
     }
 
     public void deletar(T entity) {
         Assert.notNull(entity, "Entidade não pode ser nula");
         repositorio.delete(entity);
     }
+
+
 }

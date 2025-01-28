@@ -25,9 +25,9 @@ public class ViewController {
     public String cadastrarUsuario() {
         return "cadastro";
     }
-    @GetMapping("/cadastrar-recurso")
-    public String cadastrarRecurso() {
-        return "cadastrar-recurso";
+    @GetMapping("/cadastrar-video")
+    public String cadastrarvideo() {
+        return "cadastrar-video";
     }
 
     @GetMapping("/cadastrar-curso")

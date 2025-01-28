@@ -6,7 +6,7 @@ INSERT INTO USUARIO (EMAIL, NAME, PASSWORD) VALUES
 ('usuario3@example.com', 'Usuário Três', 'hashed_password3'),
 ('usuario4@example.com', 'Usuário Quatro', 'hashed_password4');
 
-INSERT INTO RECURSO_EDUCACIONAL_ABERTO (ID, CATEGORIA, DESCRICAO, LICENCA, TITULO, URL, AUTOR) VALUES
+INSERT INTO video_EDUCACIONAL_ABERTO (ID, CATEGORIA, DESCRICAO, LICENCA, TITULO, URL, AUTOR) VALUES
 (1, 'BACKEND', 'Curso sobre Java', 'Creative Commons', 'Java para Iniciantes', 'http://exemplo.com/java', 'pedro'),
 (2, 'BACKEND', 'Curso sobre Python', 'MIT', 'Aprenda Python', 'http://exemplo.com/python', 2),
 (3, 'BACKEND', 'Curso sobre Node.js', 'Apache', 'Introdução ao Node.js', 'http://exemplo.com/nodejs', 'pedro');
@@ -32,7 +32,7 @@ INSERT INTO USUARIO_INSCRICOES (USUARIO_ID, CURSO_ID) VALUES
 (1, 2),
 (1, 3),
 
-INSERT INTO CURSO_RECURSOS (CURSO_ID, REA_ID) VALUES
+INSERT INTO CURSO_videoS (CURSO_ID, REA_ID) VALUES
 (1, 1),
 (1, 2),
 (1, 3);
