@@ -1,7 +1,12 @@
 package com.example.rea4e.domain.entity;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -33,12 +38,14 @@ public class Comentario {
     @JsonIgnore
     @JsonManagedReference
     @JoinColumn(name = "USUARIO_ID", nullable = false) // Nome da coluna no banco de dados
+    @OnDelete(action = OnDeleteAction.CASCADE)//se o usuario for deletado, os comentarios tambem serao
     private Usuario autor;
 
-    @JsonIgnore//
-    @JsonManagedReference//diz para o parser que isso deve ser ignorado no nosso json
-    @ManyToOne // Um comentário está relacionado a um único video educacional
+    @ManyToOne
+    @JsonIgnore//ignora a serialização
+    @JsonManagedReference//referencia gerenciada
     @JoinColumn(name = "VIDEO_ID", nullable = false) // Nome da coluna no banco de dados
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Video videoRelacionado;
 
 

@@ -3,6 +3,7 @@ package com.example.rea4e.domain.service.impl;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import com.example.rea4e.domain.entity.Comentario;
 import com.example.rea4e.domain.entity.Video;
@@ -23,17 +24,15 @@ private final ComentarioRepository comentarioRepository;
     // Todos os métodos estão disponíveis via herança.
     // Implementações específicas do domínio podem ser adicionadas aqui
     public List<Comentario> listarComentariosPorvideo(Video video){
-        List<Comentario> lista = comentarioRepository.findByVideoRelacionado(video);
-        return lista;
+        return this.listarComentariosPorvideo(video.getId());
     }
 
    public List<Comentario> listarComentariosPorvideo(Long videoId){
-        List<Comentario> lista = comentarioRepository.findByVideoRelacionado_Id(videoId);
-        return lista;
+        return comentarioRepository.findByVideoId(videoId);
     }
 
     public Integer contarComentariosPorvideo(Long videoId){
-        Integer comentarios = comentarioRepository.findByVideoRelacionado_Id(videoId).size();
+        Integer comentarios = comentarioRepository.findByVideoId(videoId).size();
         return comentarios;
     }
 

@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
-import org.springframework.util.Assert;
 
 import com.example.rea4e.domain.entity.Usuario;
 import com.example.rea4e.domain.entity.Video;
@@ -24,7 +23,6 @@ public class VideoMapper{
         video.setUrl(videoDTO.getUrl());
         video.setCategoria(videoDTO.getCategoria());
         Usuario autor = usr.buscarPorId(videoDTO.getAutorId());
-        Assert.notNull(autor, "Autor não encontrado");
         video.setAutor(autor);
         
         return video;
@@ -33,7 +31,7 @@ public class VideoMapper{
         VideoDTO videoDTO = new VideoDTO();
         videoDTO.setTitulo(video.getTitulo());
         videoDTO.setDescricao(video.getDescricao());
-        videoDTO.setAutorId(video.getId());
+        videoDTO.setAutorId(video.getAutor().getId());
         videoDTO.setId(video.getId());
         videoDTO.setUrl(video.getUrl());
         videoDTO.setCategoria(video.getCategoria());

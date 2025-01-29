@@ -14,7 +14,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.util.List;
 import java.util.ArrayList;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Data
 @AllArgsConstructor
@@ -32,27 +31,27 @@ public class Usuario {
     @Column(name = "EMAIL", nullable = false, unique = true)
     private String email;
 
-    @Column(name = "PASSWORD", nullable = false)
-    private String password;
+    @Column(name = "SENHA", nullable = false)
+    private String senha;
 
-    @Column(name = "NAME", nullable = false)
-    private String name;
+    @Column(name = "NOME", nullable = false)
+    private String nome;
 
 
-    @JsonIgnore//diz para o parser que isso deve ser ignorado no nosso json
     @ManyToMany
     @JoinTable(
-        name = "USUARIOS_FAVORITOS",
+        name = "CURTIDAS",
         joinColumns = @JoinColumn(name = "USUARIO_ID"),
         inverseJoinColumns = @JoinColumn(name = "VIDEO_ID")
+        
     )
     private List<Video> videosFavoritos = new ArrayList<>(); // Inicializando
     
     
     public Usuario (String email, String password, String name){
         this.email = email;
-        this.password = password;
-        this.name = name;
+        this.senha = password;
+        this.nome = name;
     }
 }
 

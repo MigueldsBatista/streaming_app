@@ -31,8 +31,6 @@ public ComentarioController(ComentarioService servico) {
         return ResponseEntity.ok(comentarioSalvo);
     }
 
-
-
     @GetMapping("/{id}")
     public ResponseEntity<Comentario> buscarPorId(@PathVariable Long id) {
         Comentario comentario = servico.buscarPorId(id);

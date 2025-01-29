@@ -17,27 +17,39 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.rea4e.domain.entity.Usuario;
 import com.example.rea4e.domain.entity.Video;
 import com.example.rea4e.domain.service.UsuarioService;
+import com.example.rea4e.rest.dto.UsuarioDTO;
+import com.example.rea4e.rest.dto.VideoDTO;
+import com.example.rea4e.rest.mapper.UsuarioMapper;
+import com.example.rea4e.rest.mapper.VideoMapper;
 
 @RestController//RestController vai anotar os metodos com @ResponseBody que indica o retorno em JSON
 @RequestMapping("/api/usuario")//RequestMapping vai mapear a URL
 public class UsuarioController {
-
-    @Autowired
     private UsuarioService usr;
+    private UsuarioMapper userMapper;
+    private VideoMapper videoMapper;
+    public UsuarioController(UsuarioService usr, UsuarioMapper mapper, VideoMapper videoMapper) {
+        this.usr = usr;
+        this.userMapper = mapper;
+        this.videoMapper = videoMapper;
+    }
 
 
     // Achar um usuário pelo id
     @GetMapping("/{id}")
-    public ResponseEntity<Usuario> buscarPorId(@PathVariable Long id) {
+    public ResponseEntity<UsuarioDTO> buscarPorId(@PathVariable Long id) {
         Usuario usuario = usr.buscarPorId(id);
-        return ResponseEntity.ok(usuario);
+        UsuarioDTO usuarioDTO = userMapper.toDTO(usuario);
+        return ResponseEntity.ok(usuarioDTO);
     }
 
     // Criar um usuário
     @PostMapping
-    public ResponseEntity<Usuario> salvar(@RequestBody Usuario usuario) {
-        Usuario savedUsuario = usr.salvar(usuario);
-        return new ResponseEntity<>(savedUsuario, HttpStatus.CREATED);
+    public ResponseEntity<UsuarioDTO> salvar(@RequestBody UsuarioDTO usuarioDTO) {
+        Usuario usuario = userMapper.toUsuario(usuarioDTO);
+        Usuario saved = usr.salvar(usuario);
+        UsuarioDTO savedDTO = userMapper.toDTO(saved);
+        return new ResponseEntity<>(savedDTO, HttpStatus.CREATED);
     }
 
     // Deletar um usuário
@@ -55,9 +67,10 @@ public class UsuarioController {
     }
 
     @GetMapping("/{usuarioId}/favoritos")
-    public ResponseEntity<List<Video>> listarFavoritos(@PathVariable Long usuarioId) {
+    public ResponseEntity<List<VideoDTO>> listarFavoritos(@PathVariable Long usuarioId) {
         Usuario usuario = usr.buscarPorId(usuarioId);
-        return ResponseEntity.ok(usuario.getVideosFavoritos());
+        List<Video> favoritos = usuario.getVideosFavoritos();
+        return ResponseEntity.ok(videoMapper.toDTOList(favoritos));
     }
     
     // Desfavoritar uma aula
@@ -68,9 +81,9 @@ public class UsuarioController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Usuario> atualizar(@PathVariable Long id, @RequestBody Usuario usuario) {
+    public ResponseEntity<UsuarioDTO> atualizar(@PathVariable Long id, @RequestBody Usuario usuario) {
         usuario.setId(id);
-        return ResponseEntity.ok(usr.salvar(usuario));
+        return ResponseEntity.ok(userMapper.toDTO(usr.salvar(usuario)));
     }
 
 
