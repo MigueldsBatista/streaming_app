@@ -6,6 +6,8 @@ import org.springframework.stereotype.Component;
 
 import com.example.rea4e.domain.entity.Usuario;
 import com.example.rea4e.domain.entity.Video;
+import com.example.rea4e.domain.event.AdicionarPermissaoUsuarioEvent;
+import com.example.rea4e.domain.event.RemoverPermissaoUsuarioEvent;
 import com.example.rea4e.domain.event.VideoDesfavoritadoEvent;
 import com.example.rea4e.domain.event.VideoFavoritadoEvent;
 import com.example.rea4e.domain.exception.ResourceAlreadyFavoritedException;
@@ -17,12 +19,10 @@ import com.example.rea4e.domain.service.VideoService;
 @Component
 public class UsuarioEventListener {
     private final UsuarioService usuarioService;
-    private final UsuarioRepository usuarioRepository;
     private final VideoService reaService;
 
-    public UsuarioEventListener(UsuarioService usuarioService, UsuarioRepository usuarioRepository, VideoService reaService) {
+    public UsuarioEventListener(UsuarioService usuarioService, VideoService reaService) {
         this.usuarioService = usuarioService;
-        this.usuarioRepository = usuarioRepository;
         this.reaService = reaService;
     }
 
@@ -50,7 +50,25 @@ public class UsuarioEventListener {
             throw new ResourceNotPresentInFavouritesException("Video não está presente na lista de favoritos.");
         }
             usuario.getVideosFavoritos().remove(video);
-            usuarioRepository.save(usuario);
+            usuarioService.salvar(usuario);
+    }
+
+    @EventListener
+    public void handleAdicionarPermissao(AdicionarPermissaoUsuarioEvent event){
+        Long usuarioId=event.getUsuarioId();
+        String permissao = event.getPermissao();
+        Usuario usuario = usuarioService.buscarPorId(usuarioId);
+        usuario.adicionarPermissaoUsuario(permissao);
+        usuarioService.salvar(usuario);
+    }
+
+    @EventListener
+    public void handleRemoverPermissao(RemoverPermissaoUsuarioEvent event){
+        Long usuarioId=event.getUsuarioId();
+        String permissao = event.getPermissao();
+        Usuario usuario = usuarioService.buscarPorId(usuarioId);
+        usuario.removerPermissaoUsuario(permissao);
+        usuarioService.salvar(usuario);
     }
 
 }

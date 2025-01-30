@@ -1,4 +1,4 @@
-package com.example.rea4e.domain.service;
+package com.example.rea4e.domain.publisher;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
@@ -22,4 +22,14 @@ public class UsuarioEventPublisher {
     publisher.publishEvent(event);
     }
 
+    public void publishAdicionarPermissao(Long usuaroId, String permissao){
+        AdicionarPermissaoUsuarioEvent event = new AdicionarPermissaoUsuarioEvent(this, usuaroId, permissao);
+        publisher.publishEvent(event);
+    }
+    public void publishRemoverPermissao(Long usuaroId, String permissao){
+        RemoverPermissaoUsuarioEvent event = new RemoverPermissaoUsuarioEvent(this, usuaroId, permissao);
+        publisher.publishEvent(event);
+    }
+
+    
 }

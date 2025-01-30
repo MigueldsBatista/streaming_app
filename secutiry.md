@@ -37,3 +37,9 @@ podemos injetar um UsuarioRepository pra ir no banco de dados e buscar nossas in
 UserDetails <- UserDetailsService <- UserRepository <-> Database
 Tudo isso acontece no filter chain
 
+//TODO
+
+finalizar as implementações dos controllers, e avançar nos logins
+
+principalmente também aprimorar o tratamento de erro da aplicação, nao pode ocorrer null pointer exception
+

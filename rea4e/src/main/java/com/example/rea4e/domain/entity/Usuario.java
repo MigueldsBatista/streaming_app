@@ -25,7 +25,6 @@ import java.util.ArrayList;
 @Table(name = "USUARIO")
 public class Usuario {
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)  
     @Column(name = "ID", nullable = false)  
@@ -58,6 +57,27 @@ public class Usuario {
         this.email = email;
         this.senha = password;
         this.nome = name;
+    }
+
+    public void adicionarPermissaoUsuario(String permissao) {
+        if (this.grupos == null || this.grupos.isEmpty()) {
+            this.grupos = permissao; // Caso não tenha permissões, define a primeira.
+        } else if (!this.grupos.contains(permissao)) {
+            this.grupos += "," + permissao; // Adiciona apenas se não existir.
+        }
+    }
+    
+    public void removerPermissaoUsuario(String permissao) {
+        if (this.grupos == null || this.grupos.isEmpty()) {
+            return; // Se estiver vazio, não há o que remover.
+        }
+    
+        // Substitui a permissão removida garantindo que não haja vírgulas extras
+        this.grupos = this.grupos.replace("," + permissao, "")
+                                 .replace(permissao + ",", "")
+                                 .replace(permissao, "")
+                                 .replaceAll(",{2,}", ",") // Remove vírgulas duplas
+                                 .replaceAll("^,|,$", ""); // Remove vírgulas do início ou fim
     }
 }
 

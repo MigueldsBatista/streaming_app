@@ -4,9 +4,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.rea4e.domain.entity.Usuario;
+import com.example.rea4e.domain.publisher.UsuarioEventPublisher;
 import com.example.rea4e.domain.repository.UsuarioRepository;
 import com.example.rea4e.domain.service.BaseService;
-import com.example.rea4e.domain.service.UsuarioEventPublisher;
 import com.example.rea4e.domain.service.UsuarioService;
 
 import jakarta.transaction.Transactional;
@@ -32,14 +32,12 @@ public class UsuarioServiceImpl extends BaseService<Usuario> implements UsuarioS
    
     @Override
     public void adicionarPermissaoUsuario(Long usuarioId, String permissao) {
-        // TODO Auto-generated method stub
-        
+        eventPublisher.publishAdicionarPermissao(usuarioId, permissao);        
     }
 
     @Override
     public void removerPermissaoUsuario(Long usuarioId, String permissao) {
-        
-        // TODO Auto-generated method stub
+        eventPublisher.publishRemoverPermissao(usuarioId, permissao);
     }
 
 

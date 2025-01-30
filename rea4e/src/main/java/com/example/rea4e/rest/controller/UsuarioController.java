@@ -1,8 +1,8 @@
 package com.example.rea4e.rest.controller;
 
+import java.util.Arrays;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -21,6 +21,7 @@ import com.example.rea4e.rest.dto.UsuarioDTO;
 import com.example.rea4e.rest.dto.VideoDTO;
 import com.example.rea4e.rest.mapper.UsuarioMapper;
 import com.example.rea4e.rest.mapper.VideoMapper;
+
 
 @RestController//RestController vai anotar os metodos com @ResponseBody que indica o retorno em JSON
 @RequestMapping("/api/usuario")//RequestMapping vai mapear a URL
@@ -86,5 +87,28 @@ public class UsuarioController {
         return ResponseEntity.ok(userMapper.toDTO(usr.salvar(usuario)));
     }
 
+    @PostMapping("/{usuarioId}/permissao/{permissaoAdicionada}")
+    public ResponseEntity<UsuarioDTO> adicionarPermissao(@PathVariable Long usuarioId, @PathVariable String permissaoAdicionada){
+        Usuario usuario = usr.buscarPorId(usuarioId);
+        usr.adicionarPermissaoUsuario(usuarioId, permissaoAdicionada);
+        UsuarioDTO responseUsr = userMapper.toDTO(usuario);
+        return ResponseEntity.ok(responseUsr);
+    }
 
+    @DeleteMapping("/{usuarioId}/permissao/{permissaoRemovida}")
+    public ResponseEntity<Void> removerPermissao(@PathVariable Long usuarioId, @PathVariable String permissaoRemovida){
+        usr.removerPermissaoUsuario(usuarioId, permissaoRemovida);
+        
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{usuarioId}/permissao")
+    public ResponseEntity<List<String>> obterPermissoes(@PathVariable Long usuarioId){
+        Usuario usuario = usr.buscarPorId(usuarioId);
+
+        List<String> permissoes =  Arrays.asList(usuario.getGrupos().split(","));
+        
+        return ResponseEntity.ok(permissoes);
+
+    }
 }
