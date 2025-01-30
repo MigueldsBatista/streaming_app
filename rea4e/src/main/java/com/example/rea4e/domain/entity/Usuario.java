@@ -13,6 +13,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.util.List;
+
+
+
 import java.util.ArrayList;
 
 @Data
@@ -38,6 +41,9 @@ public class Usuario {
     private String nome;
 
 
+    @Column(name="GRUPOS")
+    private String grupos; // Armazenando como uma string separada por vírgulas
+ 
     @ManyToMany
     @JoinTable(
         name = "CURTIDAS",

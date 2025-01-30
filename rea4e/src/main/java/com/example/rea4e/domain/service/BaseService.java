@@ -1,12 +1,15 @@
 package com.example.rea4e.domain.service;
 
 import jakarta.persistence.EntityNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import java.util.List;
 
+@Service
 public abstract class BaseService<T> {
 
     @Autowired

@@ -9,7 +9,6 @@ import org.springframework.stereotype.Repository;
 import com.example.rea4e.domain.entity.Video;
 
 
-
 @Repository
 public interface VideoRepository extends JpaRepository<Video, Long>{
 
