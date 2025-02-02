@@ -1,4 +1,4 @@
-package com.example.rea4e.domain.config;
+package com.example.rea4e.config;
 
 
 import org.springframework.context.annotation.Configuration;

@@ -19,6 +19,7 @@ public class UsuarioMapper {
         candidate.setId(usuarioDTO.getId());
         candidate.setNome(usuarioDTO.getNome());
         candidate.setSenha(usuarioDTO.getSenha());
+        candidate.setPermissoes(usuarioDTO.getPermissoes());
         return candidate;
     }
 
@@ -28,6 +29,7 @@ public class UsuarioMapper {
         candidate.setNome(usuario.getNome());
         candidate.setId(usuario.getId());
         candidate.setSenha(usuario.getSenha());
+        candidate.setPermissoes(usuario.getPermissoes());
         return candidate;
     }
 

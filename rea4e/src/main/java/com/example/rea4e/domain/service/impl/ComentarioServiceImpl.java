@@ -3,7 +3,6 @@ package com.example.rea4e.domain.service.impl;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
 
 import com.example.rea4e.domain.entity.Comentario;
 import com.example.rea4e.domain.entity.Video;

@@ -1,4 +1,5 @@
-package com.example.rea4e.domain.config;
+package com.example.rea4e.config;
+
 
 
 import org.springframework.context.annotation.Bean;
@@ -7,14 +8,21 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.core.userdetails.User;
+
+import com.example.rea4e.domain.service.UsuarioService;
+import com.example.rea4e.security.CustomUserDetailService;
+
+import lombok.RequiredArgsConstructor;
+
 //para interagir com mysql eu uso
 
 /*
@@ -35,7 +43,10 @@ import org.springframework.security.core.userdetails.User;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfiguration {
+
+        
 
     @Bean//Estamos sobrescrevendo o padrao do Spring Security
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -48,7 +59,9 @@ public class SecurityConfiguration {
         .httpBasic(Customizer.withDefaults())//no padrao ele vai fazer a autenticação via Basic Auth
         .authorizeHttpRequests(authorizer -> {
             authorizer.requestMatchers("/login").permitAll();
+            authorizer.requestMatchers(HttpMethod.POST, "api/usuario/**").permitAll();
             authorizer.requestMatchers(HttpMethod.DELETE,"/api/**").hasAnyRole("ADMIN");
+
             authorizer.requestMatchers("/api/**").hasAnyRole("USER", "ADMIN");
             authorizer.anyRequest().authenticated();
 
@@ -67,20 +80,40 @@ public class SecurityConfiguration {
         return new BCryptPasswordEncoder(10);
     }
 
-    @Bean
-    public UserDetailsService userDetailsService(PasswordEncoder encoder){
-        UserDetails user = User.builder().
-        username("user")
-        .password(encoder.encode("123"))
-        .roles("USER")
-        .build();
+    // @Bean
+    // public UserDetailsService userDetailsService(PasswordEncoder encoder){
+    //     UserDetails user = User.builder().
+    //     username("user")
+    //     .password(encoder.encode("123"))
+    //     .roles("USER")
+    //     .build();
 
-        UserDetails admin = User.builder().
-        username("admin")
-        .password(encoder.encode("123"))
-        .roles("ADMIN")
-        .build();
-        return new InMemoryUserDetailsManager(user, admin);//caso fosse de um banco de dados
-        //usariamos return new JdbcUserDetailsManager(dataSource);
+    //     UserDetails admin = User.builder().
+    //     username("admin")
+    //     .password(encoder.encode("123"))
+    //     .roles("ADMIN")
+    //     .build();
+    //     return new InMemoryUserDetailsManager(user, admin);//caso fosse de um banco de dados
+    //     //usariamos return new JdbcUserDetailsManager(dataSource);
+    // }
+
+    @Bean WebSecurityCustomizer webSecurityCustomizer(){
+        return (web) -> {
+            web.ignoring().requestMatchers(
+                "/v2/api-docs/**",
+                            "/v3/api-docs/**",
+                            "/swagger-resources/**",
+                            "/swagger-ui/**",
+                            "/swagger-ui.html",
+                            "/webjars/**"
+
+            );
+        };
+    }
+
+
+    @Bean
+    public UserDetailsService userDetailsService(UsuarioService usr){
+        return new CustomUserDetailService(usr);
     }
 }

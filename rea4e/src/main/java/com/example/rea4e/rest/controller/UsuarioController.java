@@ -1,10 +1,12 @@
 package com.example.rea4e.rest.controller;
 
-import java.util.Arrays;
 import java.util.List;
-
+import java.util.Set;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,7 +15,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.example.rea4e.domain.entity.Usuario;
 import com.example.rea4e.domain.entity.Video;
 import com.example.rea4e.domain.service.UsuarioService;
@@ -36,6 +37,10 @@ public class UsuarioController {
     }
 
 
+    @GetMapping("/me")
+    public ResponseEntity<UserDetails> obterUsuarioLogado(@AuthenticationPrincipal UserDetails userDetails) {
+        return ResponseEntity.ok(userDetails);
+    }
     // Achar um usuário pelo id
     @GetMapping("/{id}")
     public ResponseEntity<UsuarioDTO> buscarPorId(@PathVariable Long id) {
@@ -87,28 +92,39 @@ public class UsuarioController {
         return ResponseEntity.ok(userMapper.toDTO(usr.salvar(usuario)));
     }
 
-    @PostMapping("/{usuarioId}/permissao/{permissaoAdicionada}")
-    public ResponseEntity<UsuarioDTO> adicionarPermissao(@PathVariable Long usuarioId, @PathVariable String permissaoAdicionada){
+    @PostMapping("/{usuarioId}/permissao")
+    public ResponseEntity<UsuarioDTO> adicionarPermissao(@PathVariable Long usuarioId, @RequestBody String permissaoAdicionada) {
         Usuario usuario = usr.buscarPorId(usuarioId);
         usr.adicionarPermissaoUsuario(usuarioId, permissaoAdicionada);
         UsuarioDTO responseUsr = userMapper.toDTO(usuario);
         return ResponseEntity.ok(responseUsr);
     }
 
-    @DeleteMapping("/{usuarioId}/permissao/{permissaoRemovida}")
-    public ResponseEntity<Void> removerPermissao(@PathVariable Long usuarioId, @PathVariable String permissaoRemovida){
+    @DeleteMapping("/{usuarioId}/permissao")
+    public ResponseEntity<Void> removerPermissao(@PathVariable Long usuarioId, @RequestBody String permissaoRemovida){
         usr.removerPermissaoUsuario(usuarioId, permissaoRemovida);
-        
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/{usuarioId}/permissao")
-    public ResponseEntity<List<String>> obterPermissoes(@PathVariable Long usuarioId){
+    public ResponseEntity<Set<String>> obterPermissoes(@PathVariable Long usuarioId){
         Usuario usuario = usr.buscarPorId(usuarioId);
+        return ResponseEntity.ok(usuario.getPermissoes());
 
-        List<String> permissoes =  Arrays.asList(usuario.getGrupos().split(","));
-        
-        return ResponseEntity.ok(permissoes);
+    }
 
+    @GetMapping("/{usuarioId}/email")
+    public ResponseEntity<UsuarioDTO> obterUsuarioPorEmail(@PathVariable String email){
+        Usuario usuario = usr.obterUsuarioPorEmail(email);
+        return ResponseEntity.ok(userMapper.toDTO(usuario));
+    }
+
+    @GetMapping("/email")
+    public ResponseEntity<Boolean> verificarEmail(@RequestBody String email){
+        Usuario usuario = usr.obterUsuarioPorEmail(email);
+        if(usuario == null){
+            return ResponseEntity.ok(true);
+        }
+        return ResponseEntity.ok(false);
     }
 }

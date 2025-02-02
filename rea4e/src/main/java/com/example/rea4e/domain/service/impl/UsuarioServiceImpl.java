@@ -1,9 +1,11 @@
 package com.example.rea4e.domain.service.impl;
 
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;//dependencia circular com
+
 import org.springframework.stereotype.Service;
 
 import com.example.rea4e.domain.entity.Usuario;
+import com.example.rea4e.domain.exception.DuplicateException;
 import com.example.rea4e.domain.publisher.UsuarioEventPublisher;
 import com.example.rea4e.domain.repository.UsuarioRepository;
 import com.example.rea4e.domain.service.BaseService;
@@ -32,11 +34,18 @@ public class UsuarioServiceImpl extends BaseService<Usuario> implements UsuarioS
    
     @Override
     public void adicionarPermissaoUsuario(Long usuarioId, String permissao) {
+        if(permissao.isEmpty()){
+            throw new IllegalArgumentException("A permissão não pode ser uma string vazia.");
+        }
         eventPublisher.publishAdicionarPermissao(usuarioId, permissao);        
     }
 
     @Override
     public void removerPermissaoUsuario(Long usuarioId, String permissao) {
+        if(permissao.isEmpty()){
+            throw new IllegalArgumentException("A permissão não pode ser uma string vazia.");
+        }
+
         eventPublisher.publishRemoverPermissao(usuarioId, permissao);
     }
 
@@ -44,13 +53,18 @@ public class UsuarioServiceImpl extends BaseService<Usuario> implements UsuarioS
     @Override
     public Usuario salvar(Usuario usuario) {
         usuario.setSenha(passwordEncoder.encode(usuario.getSenha()));
+        if(this.obterUsuarioPorEmail(usuario.getEmail())!=null){
+            throw new DuplicateException("Já existe um usuário com o email: " + usuario.getEmail());
+        }
         return super.salvar(usuario);
-    }   
+    }
 
     @Override
     public Usuario obterUsuarioPorEmail(String email) {
         return repositorio.findByEmail(email);
         
     }
+
+    
 }
 

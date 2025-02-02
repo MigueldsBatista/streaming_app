@@ -1,6 +1,8 @@
 package com.example.rea4e.domain.entity;
 
+import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -13,10 +15,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.util.List;
-
-
-
+import java.util.Set;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 @Data
 @AllArgsConstructor
@@ -38,10 +39,6 @@ public class Usuario {
 
     @Column(name = "NOME", nullable = false)
     private String nome;
-
-
-    @Column(name="GRUPOS")
-    private String grupos; // Armazenando como uma string separada por vírgulas
  
     @ManyToMany
     @JoinTable(
@@ -53,32 +50,22 @@ public class Usuario {
     private List<Video> videosFavoritos = new ArrayList<>(); // Inicializando
     
     
+    @ElementCollection
+    @CollectionTable(
+        name = "PERMISSOES",
+        joinColumns = @JoinColumn(name = "USUARIO_ID")
+    )
+    @Column(name = "PERMISSAO")
+    private Set<String> permissoes = new HashSet<String>();
+
+
     public Usuario (String email, String password, String name){
         this.email = email;
         this.senha = password;
         this.nome = name;
     }
 
-    public void adicionarPermissaoUsuario(String permissao) {
-        if (this.grupos == null || this.grupos.isEmpty()) {
-            this.grupos = permissao; // Caso não tenha permissões, define a primeira.
-        } else if (!this.grupos.contains(permissao)) {
-            this.grupos += "," + permissao; // Adiciona apenas se não existir.
-        }
-    }
     
-    public void removerPermissaoUsuario(String permissao) {
-        if (this.grupos == null || this.grupos.isEmpty()) {
-            return; // Se estiver vazio, não há o que remover.
-        }
-    
-        // Substitui a permissão removida garantindo que não haja vírgulas extras
-        this.grupos = this.grupos.replace("," + permissao, "")
-                                 .replace(permissao + ",", "")
-                                 .replace(permissao, "")
-                                 .replaceAll(",{2,}", ",") // Remove vírgulas duplas
-                                 .replaceAll("^,|,$", ""); // Remove vírgulas do início ou fim
-    }
 }
 
 
