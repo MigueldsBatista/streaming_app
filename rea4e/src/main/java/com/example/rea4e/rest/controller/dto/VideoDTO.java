@@ -1,4 +1,5 @@
-package com.example.rea4e.rest.dto;
+package com.example.rea4e.rest.controller.dto;
+
 
 import org.springframework.stereotype.Component;
 

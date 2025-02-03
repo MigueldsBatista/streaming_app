@@ -1,4 +1,5 @@
-package com.example.rea4e.rest.mapper;
+package com.example.rea4e.rest.controller.mapper;
+
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -8,7 +9,7 @@ import org.springframework.stereotype.Component;
 import com.example.rea4e.domain.entity.Usuario;
 import com.example.rea4e.domain.entity.Video;
 import com.example.rea4e.domain.service.UsuarioService;
-import com.example.rea4e.rest.dto.VideoDTO;
+import com.example.rea4e.rest.controller.dto.VideoDTO;
 
 @Component
 public class VideoMapper{

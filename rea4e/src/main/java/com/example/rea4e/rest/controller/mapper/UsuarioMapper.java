@@ -1,4 +1,6 @@
-package com.example.rea4e.rest.mapper;
+package com.example.rea4e.rest.controller.mapper;
+
+
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -6,7 +8,8 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
 
 import com.example.rea4e.domain.entity.Usuario;
-import com.example.rea4e.rest.dto.UsuarioDTO;
+import com.example.rea4e.rest.controller.dto.UsuarioDTO;
+
 
 
 @Component

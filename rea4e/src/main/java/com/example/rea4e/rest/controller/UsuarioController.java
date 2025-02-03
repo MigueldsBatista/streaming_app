@@ -5,7 +5,6 @@ import java.util.Set;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,10 +17,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.rea4e.domain.entity.Usuario;
 import com.example.rea4e.domain.entity.Video;
 import com.example.rea4e.domain.service.UsuarioService;
-import com.example.rea4e.rest.dto.UsuarioDTO;
-import com.example.rea4e.rest.dto.VideoDTO;
-import com.example.rea4e.rest.mapper.UsuarioMapper;
-import com.example.rea4e.rest.mapper.VideoMapper;
+import com.example.rea4e.rest.controller.dto.VideoDTO;
+import com.example.rea4e.rest.controller.dto.UsuarioDTO;
+import com.example.rea4e.rest.controller.mapper.UsuarioMapper;
+import com.example.rea4e.rest.controller.mapper.VideoMapper;
 
 
 @RestController//RestController vai anotar os metodos com @ResponseBody que indica o retorno em JSON

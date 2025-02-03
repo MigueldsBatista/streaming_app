@@ -59,9 +59,9 @@ public class SecurityConfiguration {
         .httpBasic(Customizer.withDefaults())//no padrao ele vai fazer a autenticação via Basic Auth
         .authorizeHttpRequests(authorizer -> {
             authorizer.requestMatchers("/login").permitAll();
-            authorizer.requestMatchers(HttpMethod.POST, "api/usuario/**").permitAll();
+            authorizer.requestMatchers(HttpMethod.POST, "/api/usuario/**").permitAll();
+            authorizer.requestMatchers("/error").permitAll(); // Adicione esta linha!
             authorizer.requestMatchers(HttpMethod.DELETE,"/api/**").hasAnyRole("ADMIN");
-
             authorizer.requestMatchers("/api/**").hasAnyRole("USER", "ADMIN");
             authorizer.anyRequest().authenticated();
 
@@ -87,7 +87,6 @@ public class SecurityConfiguration {
     //     .password(encoder.encode("123"))
     //     .roles("USER")
     //     .build();
-
     //     UserDetails admin = User.builder().
     //     username("admin")
     //     .password(encoder.encode("123"))
@@ -112,8 +111,18 @@ public class SecurityConfiguration {
     }
 
 
+    // @Bean
+    // public UserDetailsService userDetailsService(UsuarioService usr){
+    //     return new CustomUserDetailService(usr);
+    // }
+
     @Bean
-    public UserDetailsService userDetailsService(UsuarioService usr){
-        return new CustomUserDetailService(usr);
+    public UserDetailsService userDetailsService() {
+        UserDetails user = User.builder()
+            .username("admin")
+            .password("123")
+            .roles("ADMIN")
+            .build();
+        return new InMemoryUserDetailsManager(user);
     }
 }

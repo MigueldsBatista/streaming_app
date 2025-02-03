@@ -19,8 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.rea4e.domain.entity.Categorias;
 import com.example.rea4e.domain.entity.Video;
 import com.example.rea4e.domain.service.VideoService;
-import com.example.rea4e.rest.dto.VideoDTO;
-import com.example.rea4e.rest.mapper.VideoMapper;
+import com.example.rea4e.rest.controller.dto.VideoDTO;
+import com.example.rea4e.rest.controller.mapper.VideoMapper;
 
 
 @RestController//RestController vai anotar os metodos com @ResponseBody que indica o retorno em JSON
