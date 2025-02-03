@@ -48,29 +48,17 @@ public class SecurityConfiguration {
 
         
 
-    @Bean//Estamos sobrescrevendo o padrao do Spring Security
+    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
-        .csrf(AbstractHttpConfigurer::disable)//Vamos desabilitar por causa do front-end
-        //Cross-Site Request Forgery é um tipo de ataque que ocorre quando um usuário mal-intencionado envia uma solicitação para um site que o usuário está autenticado.
-        .formLogin(configurer ->{
-            configurer.loginPage("/login");//Vamos permitir que a página de login seja acessada por todos
-        })
-        .httpBasic(Customizer.withDefaults())//no padrao ele vai fazer a autenticação via Basic Auth
-        .authorizeHttpRequests(authorizer -> {
-            authorizer.requestMatchers("/login").permitAll();
-            authorizer.requestMatchers(HttpMethod.POST, "/api/usuario/**").permitAll();
-            authorizer.requestMatchers("/error").permitAll(); // Adicione esta linha!
-            authorizer.requestMatchers(HttpMethod.DELETE,"/api/**").hasAnyRole("ADMIN");
-            authorizer.requestMatchers("/api/**").hasAnyRole("USER", "ADMIN");
-            authorizer.anyRequest().authenticated();
-
-            //qualquer coisa depois do anyRequest vai ser ignorado
-
-        })//Vamos autorizar todas as requisições
-        .build();
-
-        //Desse modo é igual o padrao da biblioteca 
+            .csrf(AbstractHttpConfigurer::disable) // Desabilita CSRF para testes com Postman/cURL
+            .authorizeHttpRequests(auth -> auth
+                .requestMatchers(HttpMethod.GET, "/api/usuario/**").hasAnyRole("USER", "ADMIN")
+                .requestMatchers(HttpMethod.POST, "/api/usuario/**").permitAll()
+                .anyRequest().authenticated()
+            )
+            .httpBasic(Customizer.withDefaults()) // Habilita autenticação básica
+            .build();
     }
 
     @Bean
@@ -79,22 +67,26 @@ public class SecurityConfiguration {
         //traceback, pra fazer o match o encoder verifica se é possivel gerar o mesmo hash a partir daquela senha
         return new BCryptPasswordEncoder(10);
     }
-
-    // @Bean
-    // public UserDetailsService userDetailsService(PasswordEncoder encoder){
-    //     UserDetails user = User.builder().
-    //     username("user")
-    //     .password(encoder.encode("123"))
-    //     .roles("USER")
-    //     .build();
-    //     UserDetails admin = User.builder().
-    //     username("admin")
-    //     .password(encoder.encode("123"))
-    //     .roles("ADMIN")
-    //     .build();
-    //     return new InMemoryUserDetailsManager(user, admin);//caso fosse de um banco de dados
-    //     //usariamos return new JdbcUserDetailsManager(dataSource);
-    // }
+    @Bean
+    public UserDetailsService userDetailsService(PasswordEncoder encoder) {
+        String encodedPassword = encoder.encode("123");
+        System.out.println("Senha codificada: " + encodedPassword);
+    
+        UserDetails user = User.builder()
+            .username("user")
+            .password(encodedPassword)
+            .roles("USER")
+            .build();
+    
+        UserDetails admin = User.builder()
+            .username("admin")
+            .password(encodedPassword)
+            .roles("ADMIN")
+            .build();
+    
+        return new InMemoryUserDetailsManager(user, admin);
+    }
+    
 
     @Bean WebSecurityCustomizer webSecurityCustomizer(){
         return (web) -> {
@@ -116,13 +108,5 @@ public class SecurityConfiguration {
     //     return new CustomUserDetailService(usr);
     // }
 
-    @Bean
-    public UserDetailsService userDetailsService() {
-        UserDetails user = User.builder()
-            .username("admin")
-            .password("123")
-            .roles("ADMIN")
-            .build();
-        return new InMemoryUserDetailsManager(user);
-    }
+
 }
