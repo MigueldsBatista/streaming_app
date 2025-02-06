@@ -36,7 +36,6 @@ public class UsuarioEventListener {
         }
             usuario.getVideosFavoritos().add(video);
             usuarioService.salvar(usuario);
-        
     }
 
     @EventListener
@@ -76,6 +75,8 @@ public class UsuarioEventListener {
         usuario.getPermissoes().remove(permissao);
         usuarioService.salvar(usuario);
     }
+
+
 
 }
 

@@ -36,5 +36,8 @@ Secundarios
 - ** Scroll infinito
 - ** Upload de arquivos e encodamento de vídeo
 
-## 
+## Regras de negócio
+
+Apenas o admin vai poder deletar vídeos
+
 

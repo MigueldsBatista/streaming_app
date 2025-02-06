@@ -12,23 +12,22 @@ import lombok.RequiredArgsConstructor;
 
 
 
-
 @RequiredArgsConstructor
-public class CustomUserDetailService implements UserDetailsService{
+public class CustomUserDetailService implements UserDetailsService {
 
     private final UsuarioService usr;
-    
+
+    @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Usuario usuario = usr.obterUsuarioPorEmail(username);
-        if(usuario == null){
+        if (usuario == null) {
             throw new UsernameNotFoundException("Usuário não encontrado");
         }
         return User.builder()
             .username(usuario.getEmail())
             .password(usuario.getSenha())
-            .roles(usuario.getPermissoes().toArray(new String[0]))//String
+            .roles(usuario.getPermissoes().toArray(new String[usuario.getPermissoes().size()]))
             .build();
     }
 
-    
 }

@@ -2,10 +2,13 @@ package com.example.rea4e.config;
 
 
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -17,6 +20,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.stereotype.Service;
 
 import com.example.rea4e.domain.service.UsuarioService;
 import com.example.rea4e.security.CustomUserDetailService;
@@ -44,25 +48,20 @@ import lombok.RequiredArgsConstructor;
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
+@EnableMethodSecurity(securedEnabled = true, jsr250Enabled = true)
 public class SecurityConfiguration {
-
-        
 
     @Bean//Estamos sobrescrevendo o padrao do Spring Security
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
-        .csrf(AbstractHttpConfigurer::disable)//Vamos desabilitar por causa do front-end
-        //Cross-Site Request Forgery é um tipo de ataque que ocorre quando um usuário mal-intencionado envia uma solicitação para um site que o usuário está autenticado.
+        .csrf(AbstractHttpConfigurer::disable)
+        .httpBasic(Customizer.withDefaults())
         .formLogin(configurer ->{
-            configurer.loginPage("/login");//Vamos permitir que a página de login seja acessada por todos
+            configurer.loginPage("/login");
         })
-        .httpBasic(Customizer.withDefaults())//no padrao ele vai fazer a autenticação via Basic Auth
         .authorizeHttpRequests(authorizer -> {
             authorizer.requestMatchers("/login").permitAll();
             authorizer.requestMatchers(HttpMethod.POST, "api/usuario/**").permitAll();
-            authorizer.requestMatchers(HttpMethod.DELETE,"/api/**").hasAnyRole("ADMIN");
-
-            authorizer.requestMatchers("/api/**").hasAnyRole("USER", "ADMIN");
             authorizer.anyRequest().authenticated();
 
             //qualquer coisa depois do anyRequest vai ser ignorado
@@ -73,13 +72,14 @@ public class SecurityConfiguration {
         //Desse modo é igual o padrao da biblioteca 
     }
 
+    //Com o bcrypt o hash é gerado de forma aleatória, nao é possivel fazer um
+    //traceback, pra fazer o match o encoder verifica se é possivel gerar o mesmo hash a partir daquela senha
     @Bean
     public PasswordEncoder passwordEncoder() {
-        //Com o bcrypt o hash é gerado de forma aleatória, nao é possivel fazer um
-        //traceback, pra fazer o match o encoder verifica se é possivel gerar o mesmo hash a partir daquela senha
         return new BCryptPasswordEncoder(10);
     }
 
+    // //pra dizer que quero usar essa implementação
     // @Bean
     // public UserDetailsService userDetailsService(PasswordEncoder encoder){
     //     UserDetails user = User.builder().
@@ -87,15 +87,32 @@ public class SecurityConfiguration {
     //     .password(encoder.encode("123"))
     //     .roles("USER")
     //     .build();
+    //     System.out.println("Senha do user: "+user.getPassword());
+
 
     //     UserDetails admin = User.builder().
     //     username("admin")
     //     .password(encoder.encode("123"))
     //     .roles("ADMIN")
     //     .build();
+    //     System.out.println("Senha do admin: "+admin.getPassword());
     //     return new InMemoryUserDetailsManager(user, admin);//caso fosse de um banco de dados
-    //     //usariamos return new JdbcUserDetailsManager(dataSource);
     // }
+
+    
+    @Bean
+    public UserDetailsService userDetailsService(UsuarioService usr){
+        return new CustomUserDetailService(usr);
+    }
+
+    // @Bean
+    // public DaoAuthenticationProvider daoAuthenticationProvider(UserDetailsService userDetailsService, PasswordEncoder encoder) {
+    //     DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+    //     provider.setUserDetailsService(userDetailsService);
+    //     provider.setPasswordEncoder(encoder);
+    //     return provider;
+    // }
+    //Por algum motivo quando eu escrevi esse código, rodei e depois comentei ele  continuou funcionando
 
     @Bean WebSecurityCustomizer webSecurityCustomizer(){
         return (web) -> {
@@ -112,8 +129,7 @@ public class SecurityConfiguration {
     }
 
 
-    @Bean
-    public UserDetailsService userDetailsService(UsuarioService usr){
-        return new CustomUserDetailService(usr);
-    }
+
+
+
 }

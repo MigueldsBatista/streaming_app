@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Set;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -36,13 +38,14 @@ public class UsuarioController {
         this.videoMapper = videoMapper;
     }
 
-
     @GetMapping("/me")
+    @PreAuthorize("hasAnyRole('ADMIN, USER')")
     public ResponseEntity<UserDetails> obterUsuarioLogado(@AuthenticationPrincipal UserDetails userDetails) {
         return ResponseEntity.ok(userDetails);
     }
     // Achar um usuário pelo id
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UsuarioDTO> buscarPorId(@PathVariable Long id) {
         Usuario usuario = usr.buscarPorId(id);
         UsuarioDTO usuarioDTO = userMapper.toDTO(usuario);
@@ -52,6 +55,8 @@ public class UsuarioController {
     // Criar um usuário
     @PostMapping
     public ResponseEntity<UsuarioDTO> salvar(@RequestBody UsuarioDTO usuarioDTO) {
+
+
         Usuario usuario = userMapper.toUsuario(usuarioDTO);
         Usuario saved = usr.salvar(usuario);
         UsuarioDTO savedDTO = userMapper.toDTO(saved);
@@ -60,6 +65,7 @@ public class UsuarioController {
 
     // Deletar um usuário
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deletar(@PathVariable Long id) {
         usr.deletar(id);
         return ResponseEntity.noContent().build();
@@ -67,12 +73,14 @@ public class UsuarioController {
 
     // Favoritar uma aula
     @PostMapping("/{usuarioId}/favoritar/{videoId}")
+    @PreAuthorize("hasAnyRole('ADMIN, USER')")
     public ResponseEntity<Void> favoritarAula(@PathVariable Long usuarioId, @PathVariable Long videoId) {
         usr.favoritarVideo(usuarioId, videoId);
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/{usuarioId}/favoritos")
+    @PreAuthorize("hasAnyRole('ADMIN, USER')")
     public ResponseEntity<List<VideoDTO>> listarFavoritos(@PathVariable Long usuarioId) {
         Usuario usuario = usr.buscarPorId(usuarioId);
         List<Video> favoritos = usuario.getVideosFavoritos();
@@ -81,18 +89,21 @@ public class UsuarioController {
     
     // Desfavoritar uma aula
     @DeleteMapping("/{usuarioId}/favoritar/{videoId}")
+    @PreAuthorize("hasAnyRole('ADMIN, USER')")
     public ResponseEntity<Void> desfavoritarAula(@PathVariable Long usuarioId, @PathVariable Long videoId) {
         usr.desfavoritarVideo(usuarioId, videoId);
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN, USER')")
     public ResponseEntity<UsuarioDTO> atualizar(@PathVariable Long id, @RequestBody Usuario usuario) {
         usuario.setId(id);
         return ResponseEntity.ok(userMapper.toDTO(usr.salvar(usuario)));
     }
 
     @PostMapping("/{usuarioId}/permissao")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UsuarioDTO> adicionarPermissao(@PathVariable Long usuarioId, @RequestBody String permissaoAdicionada) {
         Usuario usuario = usr.buscarPorId(usuarioId);
         usr.adicionarPermissaoUsuario(usuarioId, permissaoAdicionada);
@@ -101,12 +112,14 @@ public class UsuarioController {
     }
 
     @DeleteMapping("/{usuarioId}/permissao")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> removerPermissao(@PathVariable Long usuarioId, @RequestBody String permissaoRemovida){
         usr.removerPermissaoUsuario(usuarioId, permissaoRemovida);
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/{usuarioId}/permissao")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Set<String>> obterPermissoes(@PathVariable Long usuarioId){
         Usuario usuario = usr.buscarPorId(usuarioId);
         return ResponseEntity.ok(usuario.getPermissoes());
@@ -114,6 +127,7 @@ public class UsuarioController {
     }
 
     @GetMapping("/{usuarioId}/email")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UsuarioDTO> obterUsuarioPorEmail(@PathVariable String email){
         Usuario usuario = usr.obterUsuarioPorEmail(email);
         return ResponseEntity.ok(userMapper.toDTO(usuario));

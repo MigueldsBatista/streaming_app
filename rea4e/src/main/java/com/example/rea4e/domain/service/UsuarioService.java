@@ -15,4 +15,7 @@ void adicionarPermissaoUsuario(Long usuarioId, String permissao);
 void removerPermissaoUsuario(Long usuarioId, String permissao);
 Usuario obterUsuarioPorEmail(String email);
 
+boolean isUserSaved(Long usuarioId);
+boolean isUserSaved(Usuario usuario);
+boolean isUserSaved(String username);
 }

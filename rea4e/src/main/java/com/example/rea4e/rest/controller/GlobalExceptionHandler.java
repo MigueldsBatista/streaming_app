@@ -5,9 +5,12 @@ import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.example.rea4e.domain.exception.*;
 
@@ -80,19 +83,37 @@ public class GlobalExceptionHandler {
         );
     }
 
-    // // Catch-all para exceções não mapeadas
-    // @ExceptionHandler(Exception.class)
-    // public ResponseEntity<ErrorResponse> handleGenericException(Exception ex) {
-    //     return this.buildResponse(
-    //         HttpStatus.INTERNAL_SERVER_ERROR,
-    //         "INTERNAL_ERROR",
-    //         "Ocorreu um erro inesperado"
-    //     );
-    // }
-
+    
+    
+    @ExceptionHandler(AccessDeniedException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ErrorResponse handleAccessDeniedException(AccessDeniedException e){
+        return new ErrorResponse(
+            HttpStatus.FORBIDDEN, HttpStatus.FORBIDDEN.value()+"", e.getMessage()
+            );
+    }
+    
+    @ExceptionHandler(AuthorizationDeniedException.class)
+    public ResponseEntity<ErrorResponse> handleAuthorizationDeniedException(AuthorizationDeniedException e){
+        return this.buildResponse(
+            HttpStatus.FORBIDDEN,
+            HttpStatus.FORBIDDEN.value()+"",
+            e.getMessage()
+            );
+        }
+    // Catch-all para exceções não mapeadas
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorResponse> handleGenericException(Exception ex) {
+        return this.buildResponse(
+            HttpStatus.INTERNAL_SERVER_ERROR,
+            "INTERNAL_ERROR",
+            "Exceção não tradata: " +ex+" "+ex.getMessage()
+        );
+    }
+        
     private ResponseEntity<ErrorResponse> buildResponse(HttpStatus status, String errorCode, String message) {
         return ResponseEntity
-            .status(status)
-            .body(new ErrorResponse(status, errorCode, message));
+        .status(status)
+        .body(new ErrorResponse(status, errorCode, message));
     }
-}
+    }

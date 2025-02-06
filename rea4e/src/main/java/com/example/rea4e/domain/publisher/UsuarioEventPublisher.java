@@ -1,12 +1,15 @@
 package com.example.rea4e.domain.publisher;
-import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.stereotype.Service;
 
-import com.example.rea4e.domain.event.*;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.stereotype.Component;
+import com.example.rea4e.domain.event.AdicionarPermissaoUsuarioEvent;
+import com.example.rea4e.domain.event.RemoverPermissaoUsuarioEvent;
+import com.example.rea4e.domain.event.VideoDesfavoritadoEvent;
+import com.example.rea4e.domain.event.VideoFavoritadoEvent;
 
 import lombok.RequiredArgsConstructor;
 
-@Service
+@Component
 @RequiredArgsConstructor
 public class UsuarioEventPublisher {
     private final ApplicationEventPublisher publisher;
@@ -30,6 +33,7 @@ public class UsuarioEventPublisher {
         RemoverPermissaoUsuarioEvent event = new RemoverPermissaoUsuarioEvent(this, usuaroId, permissao);
         publisher.publishEvent(event);
     }
+
 
     
 }

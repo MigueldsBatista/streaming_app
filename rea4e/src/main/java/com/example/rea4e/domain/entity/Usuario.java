@@ -4,18 +4,22 @@ import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.util.List;
 import java.util.Set;
+
+
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -40,6 +44,10 @@ public class Usuario {
     @Column(name = "NOME", nullable = false)
     private String nome;
  
+    @ManyToOne//um criador cria varios usuarios
+    @JoinColumn(name = "CRIADOR_ID")
+    private Usuario criador;
+
     @ManyToMany
     @JoinTable(
         name = "CURTIDAS",
@@ -50,10 +58,11 @@ public class Usuario {
     private List<Video> videosFavoritos = new ArrayList<>(); // Inicializando
     
     
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(
         name = "PERMISSOES",
         joinColumns = @JoinColumn(name = "USUARIO_ID")
+        
     )
     @Column(name = "PERMISSAO")
     private Set<String> permissoes = new HashSet<String>();
